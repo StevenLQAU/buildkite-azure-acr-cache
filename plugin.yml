@@ -1,0 +1,15 @@
+name: Azure ACR cache
+description: Azure ACR cache
+author: https://github.com/StevenLQAU
+requirements: []
+configuration:
+  properties:
+    files:
+      type: array
+      items: 
+        - type: string
+    static:
+      type: array
+      items: 
+        - type: string 
+  additionalProperties: false

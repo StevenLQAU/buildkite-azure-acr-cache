@@ -1,0 +1,6 @@
+services:
+  lint:
+    image: buildkite/plugin-linter
+    command: ['--id', 'a-github-user/file-counter']
+    volumes:
+      - ".:/plugin:ro"
