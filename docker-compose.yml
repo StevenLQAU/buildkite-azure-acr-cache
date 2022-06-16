@@ -1,6 +1,6 @@
 services:
   lint:
     image: buildkite/plugin-linter
-    command: ['--id', 'a-github-user/file-counter']
+    command: ['--id', 'https://github.com/StevenLQAU/buildkite-azure-acr-cache.git#0fa9f21']
     volumes:
       - ".:/plugin:ro"

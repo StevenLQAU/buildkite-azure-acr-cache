@@ -1,5 +1,46 @@
 #!/bin/bash
 set -euo pipefail
+source ./hooks/lib/common.sh
 
-FILES="$BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES"
-STATICS = "$BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATIC"
+ BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_0='plugin.yml'
+BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_1='README.md'
+
+BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS_0="ver"
+BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS_1="other"
+
+BUILDKITE_PLUGIN_AZURE_ACR_CACHE_DOCKER_FILE='dockerfile'
+BUILDKITE_PLUGIN_AZURE_ACR_CACHE_IMAGE_NAME='test'
+exec() {
+    local FILES
+    local STATICS
+    # FILES=(${BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES})
+    # # STATICS = "${BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATIC}"
+    local CONTENT
+    if([[ -n ${BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_0} ]]) 
+    then
+        FILES=($(read_list "BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES"))
+        for i in ${!FILES[@]}; do
+            CONTENT+=$(cat "$PWD/${FILES[$i]}")
+        done
+    fi
+
+    if([[ -n ${BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS_0} ]])
+    then
+        STATICS=($(read_list "BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS"))
+        for i in ${!STATICS[@]}; do
+            CONTENT+=${STATICS[$i]}
+        done
+    fi
+    #STATICS=($(read_list "BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS"))
+    # FILES=($(read_list "BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES"))
+    # STATICS=($(read_list "BUILDKITE_PLUGIN_AZURE_ACR_CACHE_STATICS"))
+    local TAG=$(echo $CONTENT | sha256sum)
+
+    local DOCKERFILE=BUILDKITE_PLUGIN_AZURE_ACR_CACHE_DOCKER_FILE
+    local IMAGE_NAME=BUILDKITE_PLUGIN_AZURE_ACR_CACHE_IMAGE_NAME
+
+    # pull image || build image && push 
+    pull_image $IMAGE_NAME $TAG || build_push_image $DOCKERFILE $IMAGE_NAME $TAG
+}
+
+exec

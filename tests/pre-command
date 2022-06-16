@@ -1,0 +1,19 @@
+#!/usr/bin/env bats
+
+load '/usr/local/lib/bats/load.bash'
+
+# Uncomment the following line to debug stub failures
+# export BUILDKITE_AGENT_STUB_DEBUG=/dev/tty
+
+@test "Can get params" {
+  export BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_0=a
+  export BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_1=b
+  export BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_2=c
+  export BUILDKITE_PLUGIN_AZURE_ACR_CACHE_FILES_3=d
+
+  run "$PWD/hooks/pre-command"
+
+  assert_success
+
+
+}

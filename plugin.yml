@@ -8,7 +8,7 @@ configuration:
       type: array
       items: 
         - type: string
-    static:
+    statics:
       type: array
       items: 
         - type: string 
